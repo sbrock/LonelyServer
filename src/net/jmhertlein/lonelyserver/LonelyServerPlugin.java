@@ -37,6 +37,7 @@ public class LonelyServerPlugin extends JavaPlugin {
     public void onEnable() {
         Bukkit.getServer().getPluginManager().registerEvents(new LogListener(), this);
         Logger.getLogger("Minecraft").log(Level.INFO, "LonelyServer is free software. For more information, see http://www.gnu.org/licenses/quick-guide-gplv3.html and http://www.gnu.org/licenses/lgpl.txt");
+        Logger.getLogger("Minecraft").log(Level.INFO, "LonelyServer's source code is available as per its license here: https://github.com/jmhertlein/LonelyServer");
     }
     
     private class LogListener implements Listener {
