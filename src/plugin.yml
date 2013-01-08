@@ -1,0 +1,7 @@
+author: Joshua M Hertlein
+database: false
+description: A simple plugin to let a player logging in to an empty server know they are not as alone as it may seem.
+main: net.jmhertlein.lonelyserver.LonelyServerPlugin
+name: LonelyServer
+startup: postworld
+version: '1.0'
