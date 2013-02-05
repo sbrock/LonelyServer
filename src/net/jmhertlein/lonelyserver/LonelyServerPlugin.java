@@ -42,16 +42,16 @@ public class LonelyServerPlugin extends JavaPlugin {
     
     private Player mostRecentLogoffPlayer;
     private long mostRecentLogoffTime;
+	private String message;
     
     @Override
     public void onEnable() {
         Bukkit.getServer().getPluginManager().registerEvents(new LogListener(), this);
-        mcLogger.log(Level.INFO, "LonelyServer is free software. For more information, see http://www.gnu.org/licenses/quick-guide-gplv3.html and http://www.gnu.org/licenses/lgpl.txt");
-        mcLogger.log(Level.INFO, "LonelyServer's source code is available as per its license here: https://github.com/jmhertlein/LonelyServer");
         
         
         color = ChatColor.DARK_AQUA;
         File sourceDir = getDataFolder();
+		
         
         if(!sourceDir.exists())
             sourceDir.mkdir();
@@ -61,8 +61,15 @@ public class LonelyServerPlugin extends JavaPlugin {
             mcLogger.log(Level.INFO, "Lonely Server: Config loaded.");
             config.load(new File(sourceDir, configFile));
             color = ChatColor.valueOf(config.getString("chatColor"));
+			message = config.getString("message");
         } catch (FileNotFoundException ex) {
-            config.set("chatColor", color.name()); //load default
+			//print license info on first run
+        	mcLogger.log(Level.INFO, "LonelyServer is free software. For more information, see http://www.gnu.org/licenses/quick-guide-gplv3.html and http://www.gnu.org/licenses/gpl.txt");
+        	mcLogger.log(Level.INFO, "LonelyServer's source code is available as per its license here: https://github.com/jmhertlein/LonelyServer");
+            config.set("chatColor", color.name()); //load Default
+
+			config.set("message", "The last player logged off just $MINS minutes ago.");
+
             try {
                 config.save(new File(sourceDir, configFile));
                 mcLogger.log(Level.INFO, "Lonely Server: Default config written.");
@@ -85,9 +92,8 @@ public class LonelyServerPlugin extends JavaPlugin {
         
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent e) {
-            //System.out.println("This method observes that there are " + Bukkit.getServer().getOnlinePlayers().length + " players online.");
             if(Bukkit.getServer().getOnlinePlayers().length == 1 && mostRecentLogoffPlayer != null) {
-                e.getPlayer().sendMessage(color + "The last player was online " + getMinutesSinceLastLogoff() + " minutes ago.");
+                e.getPlayer().sendMessage(color + getLoginMessage());
                 mcLogger.log(Level.INFO, e.getPlayer().getName() + " logged in alone, and was notified that the last player only logged off " + getMinutesSinceLastLogoff() + " minutes ago.");
             }
         }
@@ -102,5 +108,13 @@ public class LonelyServerPlugin extends JavaPlugin {
         
         return timeSpan;
     }
+
+	private String getLoginMessage(Player loginPlayer) {
+        String msg = message.replaceAll("$MINS", getMinutesSinceLastLogoff());
+		msg = msg.replaceAll("$LASTPLAYER", mostRecentLogoffPlayer.getName());
+		msg = msg.replaceAll("$CURPLAYER", loginPlayer.getName());
+
+		return msg;
+	}
     
 }
