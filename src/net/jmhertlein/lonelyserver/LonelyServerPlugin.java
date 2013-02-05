@@ -98,18 +98,17 @@ public class LonelyServerPlugin extends JavaPlugin {
             color = ChatColor.valueOf(config.getString("chatColor"));
 			message = config.getString("message");
         } catch (FileNotFoundException ex) {
-			//print license info on first run
-        	mcLogger.log(Level.INFO, "LonelyServer is free software. For more information, see http://www.gnu.org/licenses/quick-guide-gplv3.html and http://www.gnu.org/licenses/gpl.txt");
-        	mcLogger.log(Level.INFO, "LonelyServer's source code is available as per its license here: https://github.com/jmhertlein/LonelyServer");
+            //print license info on first run
+            mcLogger.log(Level.INFO, "LonelyServer is free software. For more information, see http://www.gnu.org/licenses/quick-guide-gplv3.html and http://www.gnu.org/licenses/gpl.txt");
+            mcLogger.log(Level.INFO, "LonelyServer's source code is available as per its license here: https://github.com/jmhertlein/LonelyServer");
             config.set("chatColor", color.name()); //load Default
             color = ChatColor.DARK_AQUA;
 
-			config.set("message", "The last player logged off just $MINS minutes ago.");
+            config.set("message", "The last player logged off just $MINS minutes ago.");
 
             try {
                 config.save(new File(sourceDir, configFile));
-                mcLogger.log(Level.INFO, "Lonely Server: Default config written.");
-                
+                mcLogger.log(Level.INFO, "Lonely Server: Default config written.");    
             } catch (IOException ex1) {
                 mcLogger.log(Level.SEVERE, "Lonely Server: Error writing default config");
             }
@@ -117,6 +116,6 @@ public class LonelyServerPlugin extends JavaPlugin {
             config.set("chatColor", color.toString());
             mcLogger.log(Level.SEVERE, "Lonely Server: Error loading config; probably bad markup in the file?");
         }
-	}
+    }
     
 }
