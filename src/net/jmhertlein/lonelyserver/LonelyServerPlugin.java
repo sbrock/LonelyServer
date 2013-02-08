@@ -40,7 +40,7 @@ public class LonelyServerPlugin extends JavaPlugin {
     private static final Logger mcLogger = Logger.getLogger("Minecraft");
     private static final String configFile = "config.yml";
     private static ChatColor color;
-	private static timeThresholdHours;
+    private static timeThresholdHours;
     private Player mostRecentLogoffPlayer;
     private long mostRecentLogoffTime;
     private String message;
@@ -79,9 +79,9 @@ public class LonelyServerPlugin extends JavaPlugin {
         return timeSpan;
     }
 
-	private long getHoursSinceLastLogoff() {
+    private long getHoursSinceLastLogoff() {
         return getMinutesSinceLastLogoff() / 60;
-	}
+    }
     
     /**
      * @return The time since the last player logged off in the form: "d days, h hours, m minutes"
@@ -140,12 +140,12 @@ public class LonelyServerPlugin extends JavaPlugin {
         }
     }
 
-	private void printLicenseInfo() {
+    private void printLicenseInfo() {
         mcLogger.log(Level.INFO, "LonelyServer is free software. For more information, see http://www.gnu.org/licenses/quick-guide-gplv3.html and http://www.gnu.org/licenses/gpl.txt");
         mcLogger.log(Level.INFO, "LonelyServer's source code is available as per its license here: https://github.com/jmhertlein/LonelyServer");
-	}
+    }
 
-	private void persistConfig() {
+    private void persistConfig() {
         //persist file
         try {
             config.save(new File(sourceDir, configFile));
