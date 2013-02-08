@@ -40,7 +40,7 @@ public class LonelyServerPlugin extends JavaPlugin {
     private static final Logger mcLogger = Logger.getLogger("Minecraft");
     private static final String configFile = "config.yml";
     private static ChatColor color;
-    private static timeThresholdHours;
+    private static long timeThresholdHours;
     private Player mostRecentLogoffPlayer;
     private long mostRecentLogoffTime;
     private String message;
@@ -133,7 +133,7 @@ public class LonelyServerPlugin extends JavaPlugin {
             config.set("chatColor", color.name());
             
             //write config to file
-            persistConfig();
+            persistConfig(config);
         } catch (IOException | InvalidConfigurationException ex) {
             config.set("chatColor", color.toString());
             mcLogger.log(Level.SEVERE, "Lonely Server: Error loading config; probably bad markup in the file?");
@@ -145,10 +145,9 @@ public class LonelyServerPlugin extends JavaPlugin {
         mcLogger.log(Level.INFO, "LonelyServer's source code is available as per its license here: https://github.com/jmhertlein/LonelyServer");
     }
 
-    private void persistConfig() {
-        //persist file
+    private void persistConfig(FileConfiguration config) {
         try {
-            config.save(new File(sourceDir, configFile));
+            config.save(new File(getDataFolder(), configFile));
             mcLogger.log(Level.INFO, "Lonely Server: Default config written.");
         } catch (IOException ex1) {
             mcLogger.log(Level.SEVERE, "Lonely Server: Error writing default config");
