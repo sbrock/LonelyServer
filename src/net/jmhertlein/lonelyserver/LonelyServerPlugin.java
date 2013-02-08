@@ -48,14 +48,10 @@ public class LonelyServerPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         Bukkit.getServer().getPluginManager().registerEvents(new LogListener(), this);
-
-
-
         loadConfig();
     }
 
     private class LogListener implements Listener {
-
         @EventHandler
         public void onPlayerLogoff(PlayerQuitEvent e) {
             mostRecentLogoffPlayer = e.getPlayer();
@@ -88,7 +84,6 @@ public class LonelyServerPlugin extends JavaPlugin {
 	}
     
     /**
-     * 
      * @return The time since the last player logged off in the form: "d days, h hours, m minutes"
      */
     private String getFormattedTimeSinceLastLogoff() {
@@ -122,22 +117,22 @@ public class LonelyServerPlugin extends JavaPlugin {
             config.load(new File(sourceDir, configFile));
             color = ChatColor.valueOf(config.getString("chatColor"));
             message = config.getString("message");
-			timeThresholdHours = config.getLong("timeThresholdHours");
+            timeThresholdHours = config.getLong("timeThresholdHours");
         } catch (FileNotFoundException ex) {
             //print license info on first run
-			printLicenseInfo();
-
-			//load defaults into RAM
+            printLicenseInfo();
+            
+            //load defaults into RAM
             color = ChatColor.DARK_AQUA;
             message = "The last player logged off only $TIME ago.";
-			timeThresholdHours = 6;
+            timeThresholdHours = 6;
 
             //set defaults in the config
             config.set("timeThresholdHours", timeThresholdHours);
             config.set("message", message);
             config.set("chatColor", color.name());
-
-			//write config to file
+            
+            //write config to file
             persistConfig();
         } catch (IOException | InvalidConfigurationException ex) {
             config.set("chatColor", color.toString());
