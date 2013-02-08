@@ -64,9 +64,12 @@ public class LonelyServerPlugin extends JavaPlugin {
 
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent e) {
-            if (Bukkit.getServer().getOnlinePlayers().length == 1 && mostRecentLogoffPlayer != null) {
+            if (    Bukkit.getServer().getOnlinePlayers().length == 1 
+                    && mostRecentLogoffPlayer != null 
+                    && getHoursSinceLastLogoff() < timeThresholdHours
+                    ) {
                 e.getPlayer().sendMessage(color + getLoginMessage(e.getPlayer()));
-                mcLogger.log(Level.INFO, e.getPlayer().getName() + " logged in alone, and was notified that the last player only logged off " + getMinutesSinceLastLogoff() + " minutes ago.");
+                mcLogger.log(Level.INFO, e.getPlayer().getName() + " logged in alone, and was notified that the last player only logged off " + getFormattedTimeSinceLastLogoff() + " ago.");
             }
         }
     }
@@ -79,6 +82,10 @@ public class LonelyServerPlugin extends JavaPlugin {
 
         return timeSpan;
     }
+
+	private long getHoursSinceLastLogoff() {
+        return getMinutesSinceLastLogoff() / 60;
+	}
     
     /**
      * 
