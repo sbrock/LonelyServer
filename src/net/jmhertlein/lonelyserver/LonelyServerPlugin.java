@@ -84,7 +84,7 @@ public class LonelyServerPlugin extends JavaPlugin {
     }
     
     /**
-     * @return The time since the last player logged off in the form: "d days, h hours, m minutes"
+     * @return The time since the last player logged off in the form: "d days, h hours, m minutes", or "less than a minute" if less than 60 seconds have passed
      */
     private String getFormattedTimeSinceLastLogoff() {
         long mins = getMinutesSinceLastLogoff();
@@ -93,7 +93,7 @@ public class LonelyServerPlugin extends JavaPlugin {
         hours = mins/60;
         days = hours/24;
         
-        return (days > 0 ? days + " days, " : "") + (hours > 0 ? hours + " hours, " : "") + (mins > 0 ? mins + " minutes" : "");
+        return (days > 0 ? days + " days, " : "") + (hours > 0 ? hours + " hours, " : "") + (mins > 0 ? mins + " minutes" : (days == 0 && hours == 0 ? "less than a minute" : ""));
     }
 
     private String getLoginMessage(Player loginPlayer) {
@@ -124,7 +124,7 @@ public class LonelyServerPlugin extends JavaPlugin {
             
             //load defaults into RAM
             color = ChatColor.DARK_AQUA;
-            message = "The last player logged off only $TIME ago.";
+            message = "The last player only logged off $TIME ago.";
             timeThresholdHours = 6;
 
             //set defaults in the config
