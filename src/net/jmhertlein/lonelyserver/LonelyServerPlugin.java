@@ -40,6 +40,7 @@ public class LonelyServerPlugin extends JavaPlugin {
     private static final Logger mcLogger = Logger.getLogger("Minecraft");
     private static final String configFile = "config.yml";
     private static ChatColor color;
+	private static timeThresholdHours;
     private Player mostRecentLogoffPlayer;
     private long mostRecentLogoffTime;
     private String message;
@@ -114,24 +115,41 @@ public class LonelyServerPlugin extends JavaPlugin {
             config.load(new File(sourceDir, configFile));
             color = ChatColor.valueOf(config.getString("chatColor"));
             message = config.getString("message");
+			timeThresholdHours = config.getLong("timeThresholdHours");
         } catch (FileNotFoundException ex) {
             //print license info on first run
-            mcLogger.log(Level.INFO, "LonelyServer is free software. For more information, see http://www.gnu.org/licenses/quick-guide-gplv3.html and http://www.gnu.org/licenses/gpl.txt");
-            mcLogger.log(Level.INFO, "LonelyServer's source code is available as per its license here: https://github.com/jmhertlein/LonelyServer");
-            config.set("chatColor", color.name()); //load Default
+			printLicenseInfo();
+
+			//load defaults into RAM
             color = ChatColor.DARK_AQUA;
+            message = "The last player logged off only $TIME ago.";
+			timeThresholdHours = 6;
 
-            config.set("message", "The last player logged off just $MINS minutes ago.");
+            //set defaults in the config
+            config.set("timeThresholdHours", timeThresholdHours);
+            config.set("message", message);
+            config.set("chatColor", color.name());
 
-            try {
-                config.save(new File(sourceDir, configFile));
-                mcLogger.log(Level.INFO, "Lonely Server: Default config written.");
-            } catch (IOException ex1) {
-                mcLogger.log(Level.SEVERE, "Lonely Server: Error writing default config");
-            }
+			//write config to file
+            persistConfig();
         } catch (IOException | InvalidConfigurationException ex) {
             config.set("chatColor", color.toString());
             mcLogger.log(Level.SEVERE, "Lonely Server: Error loading config; probably bad markup in the file?");
+        }
+    }
+
+	private void printLicenseInfo() {
+        mcLogger.log(Level.INFO, "LonelyServer is free software. For more information, see http://www.gnu.org/licenses/quick-guide-gplv3.html and http://www.gnu.org/licenses/gpl.txt");
+        mcLogger.log(Level.INFO, "LonelyServer's source code is available as per its license here: https://github.com/jmhertlein/LonelyServer");
+	}
+
+	private void persistConfig() {
+        //persist file
+        try {
+            config.save(new File(sourceDir, configFile));
+            mcLogger.log(Level.INFO, "Lonely Server: Default config written.");
+        } catch (IOException ex1) {
+            mcLogger.log(Level.SEVERE, "Lonely Server: Error writing default config");
         }
     }
 }
