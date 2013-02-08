@@ -78,11 +78,26 @@ public class LonelyServerPlugin extends JavaPlugin {
 
         return timeSpan;
     }
+    
+    /**
+     * 
+     * @return The time since the last player logged off in the form: "d days, h hours, m minutes"
+     */
+    private String getFormattedTimeSinceLastLogoff() {
+        long mins = getMinutesSinceLastLogoff();
+        long hours, days;
+        
+        hours = mins/60;
+        days = hours/24;
+        
+        return (days > 0 ? days + " days, " : "") + (hours > 0 ? hours + " hours, " : "") + (mins > 0 ? mins + " minutes" : "");
+    }
 
     private String getLoginMessage(Player loginPlayer) {
         String msg = message.replaceAll("$MINS", (new Long(getMinutesSinceLastLogoff())).toString());
-        msg = msg.replaceAll("$LASTPLAYER", mostRecentLogoffPlayer.getName());
-        msg = msg.replaceAll("$CURPLAYER", loginPlayer.getName());
+        msg = msg.replace("$TIME", getFormattedTimeSinceLastLogoff());
+        msg = msg.replace("$LASTPLAYER", mostRecentLogoffPlayer.getName());
+        msg = msg.replace("$CURPLAYER", loginPlayer.getName());
 
         return msg;
     }
