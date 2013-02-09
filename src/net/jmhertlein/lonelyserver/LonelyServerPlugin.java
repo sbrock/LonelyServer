@@ -91,7 +91,9 @@ public class LonelyServerPlugin extends JavaPlugin {
         long hours, days;
         
         hours = mins/60;
+        mins %= 60;
         days = hours/24;
+        hours %= 24;
         
         return (days > 0 ? days + " days, " : "") + (hours > 0 ? hours + " hours, " : "") + (mins > 0 ? mins + " minutes" : (days == 0 && hours == 0 ? "less than a minute" : ""));
     }
